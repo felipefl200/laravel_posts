@@ -15,10 +15,20 @@ class NotificationsController extends Controller
     public function notifications(Request $request)
     {
 
-        $notifications = $request->user()->notifications;
+        $notifications = $request->user()->unreadNotifications;
 
-//    dd($notifications);
         return response(compact('notifications'));
+
+    }
+
+    public function markAsRead(Request $request)
+    {
+
+        $notification = $request->user()->notifications->where('id', $request->id);
+
+        if($notification){
+            $notification->markAsRead();
+        }
 
     }
 }

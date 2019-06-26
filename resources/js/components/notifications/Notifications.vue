@@ -1,12 +1,14 @@
 <template>
     <li class="nav-item dropdown">
         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Notificações ({{notificationsItems.length}}) <span class="caret"></span>
+            Notificações ({{notifications.length}}) <span class="caret"></span>
         </a>
 
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="" v-for="notification in notificationsItems" :key="notification.id">
-                {{notification.data.comment.title}}
+            <a class="dropdown-item" href="" v-for="notification in notifications" :key="notification.id">
+
+                {{notification.data.comment.user.name}} comentou {{notification.data.comment.title}}
+                <span class="badge badge-pill badge-info" @click.prevent="markAsRead(notification.id)">Marcar como Lida</span>
             </a>
         </div>
     </li>
@@ -15,19 +17,17 @@
 <script>
     export default {
         created() {
-            this.loadNotifications()
+            // this.loadNotifications()
+            this.$store.dispatch('loadNotifications')
         },
-
-        data: function () {
-            return {
-                notificationsItems: []
+        computed: {
+            notifications() {
+                return this.$store.state.notifications.items
             }
         },
         methods: {
-            loadNotifications() {
-                axios.get('/notifications')
-                    .then(response => this.notificationsItems = response.data.notifications)
-                    .catch(e => console.log(e))
+            markAsRead(idNotification) {
+                this.$store.dispatch('markAsRead', {id: idNotification})
             }
         }
     }
