@@ -15,7 +15,7 @@ window.Toast = Toast
 
 window.Fire =  new Vue()
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('notifications', require('./components/notifications/Notifications.vue').default);
 
 const app = new Vue({
     el: '#app',

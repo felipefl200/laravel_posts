@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class PostCommented extends Notification
+class PostCommented extends Notification implements ShouldQueue
 {
     use Queueable;
     private $comment;
@@ -31,7 +31,7 @@ class PostCommented extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -43,10 +43,10 @@ class PostCommented extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Novo Comentário')
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+            ->subject("Novo comentário {$this->comment->title}")
+            ->line($this->comment->body)
+            ->action('Ver o comentário', route('posts.show', $this->comment->post_id))
+            ->line('Obrigado ');
     }
 
     /**
@@ -59,6 +59,19 @@ class PostCommented extends Notification
     {
         return [
             //
+        ];
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed $notifiable
+     * @return array
+     */
+    public function toDatabase($notifiable)
+    {
+        return [
+            'comment' => $this->comment
         ];
     }
 }
