@@ -1,6 +1,7 @@
 <?php
 
 
+Route::get('/notifications', 'NotificationsController@notifications');
 Route::post('comment', 'Posts\CommentController@store')->name('comment.store');
 Route::resource('/posts', 'Posts\PostController');
 

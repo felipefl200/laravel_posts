@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class NotificationController extends Controller
+
+class NotificationsController extends Controller
 {
     public function __construct()
     {
@@ -13,9 +14,11 @@ class NotificationController extends Controller
 
     public function notifications(Request $request)
     {
-       $notifications = $request->user()->notifications;
 
-       return response()->json(compact('notifications'));
+        $notifications = $request->user()->notifications;
+
+//    dd($notifications);
+        return response(compact('notifications'));
 
     }
 }
